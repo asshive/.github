@@ -9,6 +9,9 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
       - name: Checkout GitFlow Actions
         uses: actions/checkout@v4
         with:
@@ -16,9 +19,6 @@ jobs:
           ref: main
           token: ${{ secrets.GITFLOW_TOKEN }}
           path: .gitflow-actions
-
-      - name: Checkout this repo
-        uses: actions/checkout@v4
 
       - name: Update Organization Profile
         uses: ./.gitflow-actions/actions/update-org-profile
