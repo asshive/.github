@@ -1,0 +1,31 @@
+name: Test Checkout Order
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitFlow Actions
+        uses: actions/checkout@v4
+        with:
+          repository: assforge/gitflow-packages
+          ref: main
+          token: ${{ secrets.GITFLOW_TOKEN }}
+          path: .gitflow-actions
+
+      - name: Check 1 - after gitflow checkout
+        run: |
+          echo "=== After gitflow checkout ==="
+          ls -la | grep gitflow || echo "NOT FOUND"
+
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Check 2 - after this repo checkout
+        run: |
+          echo "=== After this repo checkout ==="
+          ls -la | grep gitflow || echo "NOT FOUND"
+          echo "=== Try to access action ==="
+          ls -la .gitflow-actions/actions/update-org-profile/ || echo "FAILED"
