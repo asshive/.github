@@ -9,19 +9,19 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v4
-
       - name: Checkout GitFlow Actions
         uses: actions/checkout@v4
         with:
           repository: ${{ vars.GITFLOW_REPO }}
           ref: main
           token: ${{ secrets.GITFLOW_TOKEN }}
-          path: gitflow-actions
+          path: .gitflow-actions
+
+      - name: Checkout this repo
+        uses: actions/checkout@v4
 
       - name: Update Organization Profile
-        uses: ./gitflow-actions/actions/update-org-profile
+        uses: ./.gitflow-actions/actions/update-org-profile
         with:
           org-name: "asshive"
           org-emoji: "🐝"
