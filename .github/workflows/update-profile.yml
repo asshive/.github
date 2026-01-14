@@ -20,19 +20,6 @@ jobs:
           token: ${{ secrets.GITFLOW_TOKEN }}
           path: gitflow-actions
 
-      - name: Debug - List directories
-        run: |
-          echo "=== PWD ==="
-          pwd
-          echo "=== GITHUB_WORKSPACE ==="
-          echo $GITHUB_WORKSPACE
-          echo "=== ls -la ==="
-          ls -la
-          echo "=== ls gitflow-actions ==="
-          ls -la gitflow-actions/ || echo "gitflow-actions not found"
-          echo "=== ls gitflow-actions/actions ==="
-          ls -la gitflow-actions/actions/ || echo "actions not found"
-
       - name: Update Organization Profile
         uses: ./gitflow-actions/actions/update-org-profile
         with:
