@@ -9,21 +9,32 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
       - name: Checkout GitFlow Actions
         uses: actions/checkout@v4
         with:
           repository: ${{ vars.GITFLOW_REPO }}
           ref: main
           token: ${{ secrets.GITFLOW_TOKEN }}
-          path: .gitflow-actions
+          path: gitflow-actions
 
-      - name: Checkout this repo
-        uses: actions/checkout@v4
-        with:
-          path: repo
+      - name: Debug - List directories
+        run: |
+          echo "=== PWD ==="
+          pwd
+          echo "=== GITHUB_WORKSPACE ==="
+          echo $GITHUB_WORKSPACE
+          echo "=== ls -la ==="
+          ls -la
+          echo "=== ls gitflow-actions ==="
+          ls -la gitflow-actions/ || echo "gitflow-actions not found"
+          echo "=== ls gitflow-actions/actions ==="
+          ls -la gitflow-actions/actions/ || echo "actions not found"
 
       - name: Update Organization Profile
-        uses: ./.gitflow-actions/actions/update-org-profile
+        uses: ./gitflow-actions/actions/update-org-profile
         with:
           org-name: "asshive"
           org-emoji: "🐝"
@@ -31,4 +42,3 @@ jobs:
           org-subtitle: "Microsb Platform Microservices"
           section-title: "Services"
           org-read-token: ${{ secrets.GITFLOW_TOKEN }}
-          working-directory: repo
