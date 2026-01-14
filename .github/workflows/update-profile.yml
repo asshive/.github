@@ -9,39 +9,23 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout this repo
+        uses: actions/checkout@v4
 
-      - name: Generate repo index
-        env:
-          GH_TOKEN: ${{ secrets.ORG_READ_TOKEN }}
-        run: |
-          mkdir -p profile
+      - name: Checkout GitFlow Actions
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.GITFLOW_REPO }}
+          ref: main
+          token: ${{ secrets.GITFLOW_TOKEN }}
+          path: .gitflow-actions
 
-          cat > profile/README.md << 'HEADER'
-          # 🐝 asshive
-
-          **Service Hive** - Microsb Platform Microservices
-
-          ## Services
-
-          | Repository | Description |
-          |------------|-------------|
-          HEADER
-
-          gh repo list "asshive" --no-archived --json name,description,url \
-            --jq 'sort_by(.name) | .[] | select(.name != ".github") | "| [\(.name)](\(.url)) | \(.description // "—") |"' \
-            >> profile/README.md
-
-          cat >> profile/README.md << 'FOOTER'
-
-          ---
-          *Part of [Microsb Platform](https://microsb.net) · Auto-generated*
-          FOOTER
-
-      - name: Commit and push
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add profile/README.md
-          git diff --staged --quiet || git commit -m "chore: update repo index"
-          git push
+      - name: Update Organization Profile
+        uses: ./.gitflow-actions/actions/update-org-profile
+        with:
+          org-name: "asshive"
+          org-emoji: "🐝"
+          org-title: "Service Hive"
+          org-subtitle: "Microsb Platform Microservices"
+          section-title: "Services"
+          org-read-token: ${{ secrets.ORG_READ_TOKEN }}
