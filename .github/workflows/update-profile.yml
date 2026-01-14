@@ -28,4 +28,4 @@ jobs:
           org-title: "Service Hive"
           org-subtitle: "Microsb Platform Microservices"
           section-title: "Services"
-          org-read-token: ${{ secrets.ORG_READ_TOKEN }}
+          org-read-token: ${{ secrets.GITFLOW_TOKEN }}
