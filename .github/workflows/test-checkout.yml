@@ -1,0 +1,37 @@
+name: Test Checkout
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Checkout GitFlow Actions
+        uses: actions/checkout@v4
+        with:
+          repository: assforge/gitflow-packages
+          ref: main
+          token: ${{ secrets.GITFLOW_TOKEN }}
+          path: gitflow-actions
+
+      - name: Verify structure
+        run: |
+          echo "=== Current directory ==="
+          pwd
+          ls -la
+          echo ""
+          echo "=== gitflow-actions ==="
+          ls -la gitflow-actions/ 2>&1 || echo "FAILED"
+          echo ""
+          echo "=== gitflow-actions/actions ==="
+          ls -la gitflow-actions/actions/ 2>&1 || echo "FAILED"
+          echo ""
+          echo "=== gitflow-actions/actions/update-org-profile ==="
+          ls -la gitflow-actions/actions/update-org-profile/ 2>&1 || echo "FAILED"
+          echo ""
+          echo "=== action.yml content ==="
+          cat gitflow-actions/actions/update-org-profile/action.yml 2>&1 || echo "FAILED"
